@@ -35,10 +35,7 @@ func (e ConcurrentEngine)Run(Parameter enginetype.Parameter) {
 	for {
 		select {
 			case citydata := <-out:
-
 			for _, virus := range citydata.Datas {
-				                                                                          //fmt.Printf("城市:%s   新增确诊:%s  累计确诊:%s  疑似:%s  治愈人数:%s  死亡:%s \n",virus.Name,virus.Todayconfirm,virus.Confirm,virus.Suspect,virus.Heal,virus.Dead)
-				//l--
 				if virus.Request != nil {
 					e.Scheduler.UrlToChan(virus)
 					//fmt.Printf("数据 %s \n\n",virus.Request)
@@ -50,7 +47,7 @@ func (e ConcurrentEngine)Run(Parameter enginetype.Parameter) {
 					}
 				}
 			}
-		                                                                                       	//做准备，不然前面没得到数据这直接关了
+			//做准备，不然前面没得到数据这直接关了
 		case <-time.After(1*time.Second):
 			return
 

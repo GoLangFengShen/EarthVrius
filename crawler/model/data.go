@@ -3,7 +3,7 @@ package model
 import "github.com/jinzhu/gorm"
 
 type VirusData struct{
-	Id uint
+	Id int
 	ProvinceDataID int
 	Name string 		 `gorm:"UNIQUE_INDEX"`
 	Todayconfirm string
@@ -12,7 +12,7 @@ type VirusData struct{
 	Dead  string
 }
 type ProvinceData struct {
-	Id uint
+	Id int
 	ProvinceName string `gorm:"UNIQUE_INDEX"`
 	Todayconfirm string
 	Confirm string
@@ -28,10 +28,3 @@ func InitMysql()(err error){
 	}
 	return Db.DB().Ping()
 }
-//Id int  `gorm:"Columu:id"`
-//ProvinceId string `gorm:"Columu:provinceid"`
-//Name string `gorm:"Columu:name;UNIQUE_INDEX"`
-//Todayconfirm string `gorm:"Columu:todayconfirm"`
-//Confirm string	`gorm:"Columu:confirm"`
-//Heal string `gorm:"Columu:heal"`
-//Dead  string `gorm:"Columu:deal"`

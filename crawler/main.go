@@ -21,7 +21,6 @@ func main(){
 	defer model.Db.Close()
 	for _,parameter:=range parameters.Parameters{
 		e.Run(parameter)
-
 	}
 }
 

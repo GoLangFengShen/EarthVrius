@@ -7,9 +7,7 @@ import (
 type SimpleScheduler struct {
 	WorkerChan chan enginetype.Data
 }
-//type ParserScheduler struct {
-//	ProvinceChan chan model.ProvinceData
-//}
+
 func (s *SimpleScheduler)UrlToChan(url enginetype.Data){
 	//开启goroutine供应CreateWorker
 	go func() {

@@ -26,7 +26,6 @@ func Enter()enginetype.Parameters{
 	}
 	abroadSrc:=enginetype.Parameter{
 		Address:"https://view.inews.qq.com/g2/getOnsInfo?name=disease_foreign&callback=jQuery34107360506572093108_1584806738559&_=1584806738560",
-		//ProvinceRegexp:`{\\"name\\":\\"[\W]*\\",\\"continent\\":\\"[\W]*\\",\\"date\\":\\"[0-9]+.[0-9]+\\",\\"isUpdated\\":[a-zA-Z]*,\\"confirmAdd\\":[0-9]+,\\"confirmAddCut\\":[0-9]+,\\"confirm\\":[0-9]+,\\"suspect\\":[0-9]+,\\"dead\\":[0-9]+,\\"heal\\":[0-9]+,\\"nowConfirm\\":[0-9]+,\\"confirmCompare\\":[^\\]+,\\"nowConfirmCompare\\":[0-9]+,\\"healCompare\\":[0-9]+,\\"deadCompare\\":[0-9]+`,
 		ProvinceRegexp:`[{\\"name\\":\\"[\W]*?\\",\\"continent[^>]*?healCompare\\":[0-9]+,\\"deadCompare\\":[0-9]+[^>]*?]*?`,
 		CityRegexp:`\\"name\\":\\"[\W]*\\"[^>]*?confirmAdd\\":[0-9]+,\\"confirmAddCut\\":[0-9]+,\\"confirm\\":[0-9]+,\\"suspect\\":[0-9]+,\\"dead\\":[0-9]+,\\"heal\\":[0-9]+`,
 		FineVirusRegexp:fineAbroadVirusRegexp,

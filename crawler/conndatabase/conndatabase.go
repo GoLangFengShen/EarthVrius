@@ -7,7 +7,6 @@ import (
 )
 
 func SaveData(results interface{}) {
-
 	Results:=results.(model.ProvinceData)
 	model.Db.AutoMigrate(&model.VirusData{})
 	model.Db.AutoMigrate(&model.ProvinceData{})
@@ -26,8 +25,6 @@ func SaveData(results interface{}) {
 		var nilvalues []model.VirusData
 		SaveProvince(bigProvince,model.Db,nilvalues)
 		SaveProvince(province,model.Db,citys)
-		SaveTitys(citys,model.Db)
-
 	}else {
 		province:=Results.ProvinceVirus[0]
 		//赋值
@@ -40,8 +37,6 @@ func SaveData(results interface{}) {
 		}
 		//创建记录
 		SaveProvince(province,model.Db,citys)
-
-		SaveTitys(citys,model.Db)
 	}
 
 }
@@ -57,54 +52,19 @@ func GiveValue(data model.VirusData,citys []model.VirusData)model.ProvinceData{
 	}
 	return provinceData
 }
-//将省和外国国家数据保存到数据库
+//将数据保存到数据库
 func SaveProvince(Province model.VirusData,db *gorm.DB,citys []model.VirusData){
 	var beingProvince model.ProvinceData
+	var city []model.VirusData
 	bigProvinceData:=GiveValue(Province,citys)
 	////查询数据
 	db.Where(model.ProvinceData{ProvinceName:bigProvinceData.ProvinceName}).First(&beingProvince)
-	////没有就创建
+	//没有就创建
 	if beingProvince.ProvinceName!=Province.Name{
 		db.Create(&bigProvinceData)
 	}else {
+		db.Where(model.VirusData{ProvinceDataID:beingProvince.Id}).Delete(&city)
+		//gorm创建主表会将外键也一并创建了，但删除更新主表，外键表不会跟着删除更新
 		db.Model(&beingProvince).Update(bigProvinceData)
 	}
 }
-//保存个省所属城市数据
-func SaveTitys(citys []model.VirusData,db *gorm.DB) {
-	//
-	//var beingTity model.VirusData
-	//
-	//	for _,city:=range citys{
-	/*	sql:="REPLACE INTO `virus_data` (`Name`,`Todayconfirm`,`Confirm`,`Heal`,`Dead`) VALUES"
-		for k,result:=range citys{
-			//db.Where(model.VirusData{Name:result.Name}).First(&CheckCity)
-			//if CheckCity.Name!=result.Name{
-			if len(citys)-1==k{
-				sql+=fmt.Sprintf("('%s','%s','%s','%s','%s');",result.Name,result.Todayconfirm,result.Confirm,result.Heal,result.Dead)
-			}else {
-				sql+=fmt.Sprintf("('%s','%s','%s','%s','%s'),",result.Name,result.Todayconfirm,result.Confirm,result.Heal,result.Dead)
-			}*/
-
-	//virusdata:=model.VirusData{
-	//Name:city.Name,
-	//Todayconfirm:city.Todayconfirm,
-	//Confirm:city.Confirm,
-	//Heal:city.Heal,
-	//Dead:city.Dead,
-	//}
-	//db.Where(model.VirusData{Name:virusdata.Name}).First(&beingTity)
-	//if beingTity.Name!=""{
-
-	db.Model(model.VirusData{}).Updates(&citys)
-
-}
-//			//db.Table("users").Where("id IN (?)", []int{10, 11}).Updates(map[string]interface{}{"name": "hello", "age": 18})
-//			db.Model(&beingTity).Update(virusdata)
-//		}else {
-//			db.Create(&virusdata)
-//		}
-//		}
-//}
-	/*db.Exec(sql)
-}*/
