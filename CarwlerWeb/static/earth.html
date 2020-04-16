@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script type="text/javascript" src="/static/js/echarts.min.js"></script>
+    <script type="text/javascript" src="/static/js/echarts-gl.min.js"></script>
+    <script type="text/javascript" src="/static/js/world.js"></script>
+    <title>全球疫情状况</title>
+    <style>
+        html{height: 100%}
+        body {
+            height: 100%;
+            margin: 0;
+            background: url('/static/img/timg.jpg') center/cover no-repeat;
+        }
+        #container{
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .tex{
+            text-indent: 2em;
+            color:yellow;
+            font-size:24px;
+        }
+    </style>
+</head>
+<body>
+
+<h1 class="tex">{{.name}}</h1>
+<h1 class="tex">今日新增:{{.todayconfirm}}</h1>
+<h1 class="tex">累计确诊:{{.confirm}}</h1>
+<h1 class="tex">治愈:{{.heal}}</h1>
+<h1 class="tex">死亡:{{.dead }}</h1>
+
+
+<div id="container"></div>
+<script>
+    //数据处理
+    /*
+     图中相关城市经纬度,根据你的需求添加数据
+     关于国家的经纬度，可以用首都的经纬度或者其他城市的经纬度
+     */
+    var geoCoordMap={
+        '美国': [-100.696295, 33.679979],
+        "西班牙": [-3.74922, 40.46366700000001],
+        "意大利": [12.56738, 41.87194],
+        '德国': [13.402393, 52.518569],
+        "法国": [2.213749, 46.227638],
+        "中国": [104.195397, 35.86166],
+        "伊朗": [53.688046, 32.427908],
+        '英国': [-0.126608, 51.208425],
+        "土耳其": [35.243322, 38.963745],
+
+
+
+        // '南宁':[108.479,23.1152],
+        // '广州': [113.5107, 23.2196],
+        // '重庆': [107.7539, 30.1904],
+        // '芬兰': [24.909912, 60.169095],
+        //
+        // '日本': [139.710164, 35.706962],
+        // '韩国': [126.979208, 37.53875],
+        // '瑞士': [7.445147, 46.956241],
+        // '东南亚': [117.53244, 5.300343],
+        // '澳大利亚': [135.193845, -25.304039],
+        // '德国': [13.402393, 52.518569],
+        // '英国': [-0.126608, 51.208425],
+        // '加拿大': [-102.646409, 59.994255]
+    };
+    /*记录下起点城市和终点城市的名称以及权重
+    数组第一位为终点城市,数组第二位为起点城市,以及城市的权重,就是图上的圆圈的大小*/
+    var CQData=[
+      [{name: "美国",value:{{.美国}} }]
+    ];
+    var GZData=[
+        [{name: "中国",value:{{.中国}} }]
+    ];
+    var NNData=[
+        [{name: "西班牙",value:{{.西班牙}} }],
+        [ {name: "意大利",value:{{.意大利}} }],
+        [ {name: "德国",value:{{.德国}} }],
+        [{name: "法国",value:{{.法国}} }],
+        [ {name: "伊朗",value:{{.伊朗}} }],
+        [ {name: "英国",value:{{.英国}} }],
+        [{name: "土耳其",value:{{.土耳其}} }]
+
+    ];
+    // var convertData=function (data) {
+    //     console.log(data);
+    //     var res=[];
+    //     for (var i=0;i<data.length;i++){
+    //         var dataItem=data[i];
+    //         var fromCoord=geoCoordMap[dataItem[1].name];
+    //         var toCoord=geoCoordMap[dataItem[0].name];
+    //         if (fromCoord&&toCoord){
+    //             res.push([fromCoord,toCoord])
+    //         }
+    //     }
+    //     console.log(res)
+    //     return res;
+    // }
+
+    var series = [];// 3D飞线
+    var dser = [];  // 2D散点坐标
+    [[CQData],[GZData],[NNData]].forEach(function(i) {
+        dser.push({
+            region: Object,
+            type: 'effectScatter',
+            coordinateSystem: 'geo',
+            zlevel: 3,
+            rippleEffect: {
+                brushType: 'stroke'
+            },
+            label: {
+                fontSize: 24,
+                show: true,
+                position: 'right',
+                formatter: '{b}'
+            },
+            itemStyle: {
+                normal: {
+                    color: '#f5f802'
+                }
+            },
+            series: {
+                name: "确诊病例",
+                type: "map",
+                geoIndex: 0,
+                data: window.dataList
+            },
+            data: i[0].map(function (dataItem) {
+                return {
+                    type: "map",
+                    name: dataItem[0].name,
+                    value: geoCoordMap[dataItem[0].name],
+                    symbolSize: dataItem[0].value /10000
+                };
+            })
+        })
+    });
+    //         {
+    //             type: 'effectScatter',
+    //             coordinateSystem: 'geo',
+    //             zlevel: 3,
+    //             rippleEffect: {
+    //                 brushType: 'stroke'
+    //             },
+    //             label: {
+    //                 normal: {
+    //                     show: true,
+    //                     position: 'left',
+    //                     fontSize:18,
+    //                     formatter: '{b}'
+    //                 }
+    //             },
+    //             itemStyle: {
+    //                 normal: {
+    //                     color: '#ff0000'
+    //                 }
+    //             },
+    //             data: [{
+    //                 name: item[0],
+    //                 value: geoCoordMap[item[0]],
+    //                 symbolSize:parseInt(Math.random()*20+10),
+    //                 label: {
+    //                     normal: {
+    //                         position: 'right'
+    //                     }
+    //                 }
+    //             }]
+    //         })
+    //     //航线效果
+    //     series.push(
+    //         {
+    //             // series: {
+    //             //     name: "确诊病例",
+    //             //     type: "map",
+    //             //     geoIndex: 0,
+    //             //     data: window.dataList
+    //             // },
+    //             type: 'lines3D',
+    //             // effect: {
+    //             //     show: true,
+    //             //     period: 3,//速度
+    //             //     trailLength: 0.1//尾部阴影
+    //             // },
+    //             // lineStyle: {//航线的视图效果
+    //             //     color: '#9ae5fc',
+    //             //     width: 1,
+    //             //     opacity: 0.6
+    //             // },
+    //             data: convertData(item[1])// 特效的起始、终点位置，一个二维数组，相当于coords: convertData(item[1])
+    //         })
+    // });
+
+
+
+
+
+    //地球的皮肤
+    var canvas = document.createElement('canvas');
+
+    var myChart = echarts.init(canvas, null, {
+        width: 4096,
+        height: 2048
+    });
+    myChart.setOption({
+        backgroundColor: 'rgba(3,28,72,0.5)',
+        title: {
+            show:true
+        },
+        geo: {
+            type: 'map',
+            map: 'world',
+            left:0,
+            top:0,
+            right: 0,
+            bottom: 0,
+            boundingCoords: [[-180, 90], [180, -90]],
+            zoom:0,
+            roam: false,
+            itemStyle: {
+                borderColor:'#000d2d',
+                normal: {
+                    areaColor: '#2455ad',
+                    borderColor:'#000c2d'
+                },
+                emphasis: {
+                    areaColor: '#357cf8'
+                }
+            },
+            label:{
+                fontSize:24
+            }
+        },
+        series:dser,
+    });
+
+    //3D地球
+    var option = {
+        backgroundColor: 'rgba(0,0,0,0)',//canvas的背景颜色
+        globe: {                     //地球
+            baseTexture:myChart,
+            top: 'middle',
+            left: 'center',
+            displacementScale: 0,
+            environment:'none',
+            shading: 'color',
+            viewControl: {
+                distance:240,
+                autoRotate: true
+            }
+        },
+        roam: true,
+        series:series
+    };
+
+
+
+    myChart.on('click', function (param) {//param即为点击目标的信息
+        // if (typeof param.seriesIndex == 'undefined') {
+        //     return;
+        // }
+        if (param.type == 'click') {
+            // myChart.setOption({
+            //     geo:{
+            //         itemStyle:{
+            //             // distance:35,
+            //             // targetCoord: [param.data.value[0], param.data.value[1]]
+            //         }
+            //     }
+            // })
+           //setTimeout(function(){ alert("Hello"); }, 10);
+            setTimeout(function(){ open('/earth/'+param.name,'_parent'); }, 10);
+            // setTimeout(function () {
+            //     window.open('http://www.baidu.com')
+            // },500)
+
+        }
+    });
+    echarts.init(document.getElementById("container")).setOption(option, true);
+
+</script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

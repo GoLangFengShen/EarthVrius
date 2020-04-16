@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>疫情地图展示</title>
+    <style>
+        #myEcharts {
+            float: right;
+            width: 1400px;
+            height: 860px;
+            border: solid 1px red;
+            margin: 0 auto;
+
+        }
+        .common_table{
+            text-align: left;
+            width:23%;
+            border-collapse:collapse;
+            border:1px solid #d1d1d1;
+        }
+    </style>
+    <!-- 引入 echarts.js -->
+    <script src="https://www.echartsjs.com/examples/vendors/echarts/echarts.min.js?_v_=1578305236132"></script>
+    <!--引入中国的地图数据js文件，引入后会自动注册地图名字和数据-->
+    <script src="https://www.echartsjs.com/examples/vendors/echarts/map/js/china.js?_v_=1578305236132"></script>
+
+</head>
+
+<body>
+<!--为echarts准备一个dom容器-->
+<div id="myEcharts"></div>
+<script>
+    //初始化echarts实例
+    var myChart = echarts.init(document.getElementById('myEcharts'));
+    // 指定图表的配置项和数据
+    option = {
+        title: {
+            text: '中国疫情图',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: ['中国疫情图']
+        },
+        visualMap: {
+            type: 'piecewise',
+            pieces: [
+                { min: 1000, max: 1000000, label: '大于等于1000人', color: '#372a28' },
+                { min: 500, max: 999, label: '确诊500-999人', color: '#4e160f' },
+                { min: 100, max: 499, label: '确诊100-499人', color: '#974236' },
+                { min: 10, max: 99, label: '确诊10-99人', color: '#ee7263' },
+                { min: 1, max: 9, label: '确诊1-9人', color: '#f5bba7' },
+            ],
+            color: ['#E0022B', '#E09107', '#A3E00B']
+        },
+        toolbox: {
+            show: true,
+            orient: 'vertical',
+            left: 'right',
+            top: 'center',
+            feature: {
+                mark: { show: true },
+                dataView: { show: true, readOnly: false },
+                restore: { show: true },
+                saveAsImage: { show: true }
+            }
+        },
+        roamController: {
+            show: true,
+            left: 'right',
+            mapTypeControl: {
+                'china': true
+            }
+        },
+        series: [
+            {
+                name: '确诊数',
+                type: 'map',
+                mapType: 'china',
+                roam: false,
+                label: {
+                    show: true,
+                    color: 'rgb(249, 249, 249)'
+                },
+                data: [
+                    {
+                        name: '北京',
+                        value: {{.ParameterProvince.北京}}
+                    }, {
+                        name: '天津',
+                        value: {{.ParameterProvince.天津}}
+                    }, {
+                        name: '上海',
+                        value: {{.ParameterProvince.上海}}
+                    }, {
+                        name: '重庆',
+                        value: {{.ParameterProvince.重庆}}
+                    }, {
+                        name: '河北',
+                        value: {{.ParameterProvince.河北}}
+                    }, {
+                        name: '河南',
+                        value: {{.ParameterProvince.河南}}
+                    }, {
+                        name: '云南',
+                        value: {{.ParameterProvince.云南}}
+                    }, {
+                        name: '辽宁',
+                        value: {{.ParameterProvince.辽宁}}
+                    }, {
+                        name: '黑龙江',
+                        value: {{.ParameterProvince.黑龙江}}
+                    }, {
+                        name: '湖南',
+                        value: {{.ParameterProvince.湖南}}
+                    }, {
+                        name: '安徽',
+                        value: {{.ParameterProvince.安徽}}
+                    }, {
+                        name: '山东',
+                        value: {{.ParameterProvince.山东}}
+                    }, {
+                        name: '新疆',
+                        value: {{.ParameterProvince.新疆}}
+                    }, {
+                        name: '江苏',
+                        value: {{.ParameterProvince.江苏}}
+                    }, {
+                        name: '浙江',
+                        value: {{.ParameterProvince.浙江}}
+                    }, {
+                        name: '江西',
+                        value: {{.ParameterProvince.江西}}
+                    }, {
+                        name: '湖北',
+                        value: {{.ParameterProvince.湖北}}
+                    }, {
+                        name: '广西',
+                        value: {{.ParameterProvince.广西}}
+                    }, {
+                        name: '甘肃',
+                        value: {{.ParameterProvince.甘肃}}
+                    }, {
+                        name: '山西',
+                        value: {{.ParameterProvince.山西}}
+                    }, {
+                        name: '内蒙古',
+                        value: {{.ParameterProvince.内蒙古}}
+                    }, {
+                        name: '陕西',
+                        value: {{.ParameterProvince.陕西}}
+                    }, {
+                        name: '吉林',
+                        value: {{.ParameterProvince.吉林}}
+                    }, {
+                        name: '福建',
+                        value: {{.ParameterProvince.福建}}
+                    }, {
+                        name: '贵州',
+                        value: {{.ParameterProvince.贵州}}
+                    }, {
+                        name: '广东',
+                        value: {{.ParameterProvince.广东}}
+                    }, {
+                        name: '青海',
+                        value: {{.ParameterProvince.青海}}
+                    }, {
+                        name: '西藏',
+                        value: {{.ParameterProvince.西藏}}
+                    }, {
+                        name: '四川',
+                        value: {{.ParameterProvince.四川}}
+                    }, {
+                        name: '宁夏',
+                        value: {{.ParameterProvince.宁夏}}
+                    }, {
+                        name: '海南',
+                        value: {{.ParameterProvince.海南}}
+                    }, {
+                        name: '台湾',
+                        value: {{.ParameterProvince.台湾}}
+                    }, {
+                        name: '香港',
+                        value: {{.ParameterProvince.香港}}
+                    }, {
+                        name: '澳门',
+                        value: {{.ParameterProvince.澳门}}
+                    }
+                ]
+            }
+        ]
+    };
+    myChart.on('click', function (param) {//param即为点击目标的信息
+        if (param.type == 'click') {
+            setTimeout(function(){ open('/china/'+param.name,'_parent'); }, 10);
+        }
+    });
+    //使用指定的配置项和数据显示图表
+    myChart.setOption(option);
+</script>
+<table class="common_table">
+    <tr>
+        <th width="3%">城市</th>
+        <th width="3%">今日新增</th>
+        <th width="3%">累计确诊</th>
+        <th width="3%">治愈</th>
+        <th width="3%">死亡</th>
+
+    </tr>
+
+
+    {{range $index ,$val :=.ParameterCity}}
+        <tr>
+            <td><a href="https://zh.wikipedia.org/wiki/{{$val.Name}}">{{$val.Name}}</a></td>
+            <td>{{$val.Todayconfirm}}</td>
+            <td>{{$val.Confirm}}</td>
+            <td>{{$val.Heal}}</td>
+            <td>{{$val.Dead}}</td>
+        </tr>
+    {{end}}
+</table>
+</body>
+
+</html>
